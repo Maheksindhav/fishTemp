@@ -203,7 +203,6 @@
             String pw = request.getParameter("pw");
             mvcfile m = new mvcfile();
             m.insertdata(refid, fnm, unm, city, mobileno, email, pw);
-            out.println(refid + fnm + unm + city + mobileno + email + pw);
             out.println("successfully");
         } else {
             out.println(" not successfully");

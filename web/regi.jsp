@@ -3,6 +3,7 @@
     Created on : 17 Jan, 2025, 11:11:52 PM
     Author     : mahek
 --%>
+<%@page import="classes.mvcfile"%>
 <%@page import="com.sun.mail.smtp.SMTPMessage"%>
 <%@page import="javax.mail.Transport"%>
 <%@page import="javax.mail.internet.InternetAddress"%>
@@ -13,7 +14,8 @@
 <%@page import="javax.mail.Session"%>
 <%@page import="java.util.Properties"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%! mvcfile crud=new mvcfile();
+%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,6 +27,7 @@
         crossorigin="anonymous"></script>
         <title>JSP Page</title>
     </head>
+    <%int id=crud.getid()+1;%>
     <body>
 
         <div class="card bg-transparent border-light"
@@ -33,13 +36,10 @@
                 Fish Transportation
             </div>
             <div class="text-center h4 text-white">REGISTRATION FORM</div>
-
-
             <div class="card-body">
                 <form class="row g-3 ">
                     <div  class=" formmain col-6" >
-                        <input type="text" class="form-control textbox" id="rid"  name="rid" oninput="saveValue()" placeholder="">
-                        <label  class="form-labeline">Reference id*</label>
+                        <input type="text" class="form-control textbox" id="rid"  name="rid" value="<%=id!=0?id:""%>" oninput="saveValue()" placeholder="" readonly>                        <label  class="form-labeline">Reference id*</label>
                     </div>
 
                     <div  class=" formmain col-6" >

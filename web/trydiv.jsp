@@ -44,7 +44,7 @@
                 <form class="row g-3 ">
 
                     <div  class=" formmain" >
-                        <input type="number" id="mno" placeholder=""name="mno" max="1234567897"  class="form-control textbox" required>
+                        <input type="number" id="mno" placeholder=""name="mno"   class="form-control textbox" required>
                         <label  class="form-labeline">Enter MobileNo</label>
                     </div>
 
@@ -102,8 +102,8 @@
                     if(pw.equals(cpw))
                     {
                         mvcfile m=new mvcfile();
-                        m.update(pw);
-                        out.print("update");
+                        m.update(pw,num);
+                        
                     }
             } else {
                 out.print("invalid number");

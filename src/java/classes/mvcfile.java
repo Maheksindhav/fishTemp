@@ -5,6 +5,7 @@
  */
 package classes;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -15,6 +16,15 @@ import org.hibernate.cfg.Configuration;
  * @author mahek
  */
 public class mvcfile {
+
+    public int getid() {
+        Configuration config = new Configuration().configure().addAnnotatedClass(registration.class);
+        SessionFactory sf = config.buildSessionFactory();
+        Session session = sf.openSession();
+        Query q1 = session.createQuery("SELECT e.refid FROM registration e ORDER BY e.refid DESC");
+        q1.setMaxResults(1);
+        return (Integer) q1.uniqueResult();
+    }
 
     public int insertdata(int refid, String fnm, String unm, String city, String mobileno, String email, String pw) {
         try {
@@ -43,16 +53,20 @@ public class mvcfile {
         return 0;
     }
 
-    public int update(String passwd) {
+    public int update(String passwd, String mobilenumber) {
         try {
-            registration obj = new registration();
-            obj.setPassword(passwd);
             Configuration con = new Configuration().configure().addAnnotatedClass(registration.class);
             SessionFactory sf = con.buildSessionFactory();
             Session s = sf.openSession();
             Transaction tx = s.beginTransaction();
-            s.update(obj);
+            String uquery = "UPDATE registration e SET e.password=:newValue WHERE e.mobileno=:number";
+            s.createQuery(uquery)
+                    .setParameter("newValue", passwd)
+                    .setParameter("number", mobilenumber)
+                    .executeUpdate();
             tx.commit();
+            tx.rollback();
+            s.close();
             System.out.println("successfully update");
 
         } catch (Exception e) {

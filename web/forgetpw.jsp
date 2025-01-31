@@ -4,6 +4,13 @@
     Author     : mahek
 --%>
 
+<%@page import="classes.mvcfile"%>
+<%@page import="java.util.List"%>
+<%@page import="org.hibernate.Query"%>
+<%@page import="org.hibernate.Session"%>
+<%@page import="org.hibernate.SessionFactory"%>
+<%@page import="org.hibernate.cfg.Configuration"%>
+<%@page import="classes.registration"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -29,7 +36,7 @@
                 <form class="row g-3 ">
 
                     <div  class=" formmain" >
-                        <input type="number" id="mno" placeholder="" class="form-control textbox">
+                        <input type="number" id="mno" placeholder=""name="mno"   class="form-control textbox" required>
                         <label  class="form-labeline">Enter MobileNo</label>
                     </div>
 
@@ -67,10 +74,36 @@
     var b = num[Math.floor(Math.random() * num.length)];
     var c = num[Math.floor(Math.random() * num.length)];
     var d = num[Math.floor(Math.random() * num.length)];
-
-
     var s = a + b + c + d;
-
-
     numcaptchvalue.innerHTML = s;
 </script>
+<%
+    try {
+        String num = request.getParameter("mno");
+        String pw = request.getParameter("pw");
+        String cpw = request.getParameter("cpw");
+        registration r = new registration();
+        Configuration con = new Configuration().configure().addAnnotatedClass(registration.class);
+        SessionFactory sf = con.buildSessionFactory();
+        Session s = sf.openSession();
+        Query o = s.createQuery("from registration where  mobileno like'%" + num + "%' ");
+        List<registration> l = o.list();
+        for (registration elem : l) {
+            String number = elem.getMobileno();
+            if (num.equals(number)) {
+                if (pw.equals(cpw)) {
+                    mvcfile m = new mvcfile();
+                    m.update(pw, num);
+
+                }
+            } else {
+                out.print("invalid number");
+            }
+        }
+
+    } catch (Exception e) {
+        System.out.println(e);
+    }
+
+
+%>
