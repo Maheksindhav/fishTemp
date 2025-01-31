@@ -4,6 +4,12 @@
     Author     : mahek
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="org.hibernate.Query"%>
+<%@page import="org.hibernate.Session"%>
+<%@page import="org.hibernate.SessionFactory"%>
+<%@page import="org.hibernate.cfg.Configuration"%>
+<%@page import="classes.registration"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -31,14 +37,14 @@
             <form class="px-3 py-1">
 
                 <div class="card-body">
-                    
+
                     <div class="formmain mb-3">
                         <input type="text" name="unm" placeholder=" " class="form-control textbox"/>
                         <label  class="form-labeline">Enter Username</label>
                     </div>
-              
+
                     <div class="formmain mb-3"  style="padding: 0px !important;" >
-                        <input type="password" name="unm" placeholder=" " class="form-control textbox"/>
+                        <input type="password" name="pw" placeholder=" " class="form-control textbox"/>
                         <label  class="form-labeline">Enter Password</label>
                     </div>
                     <div class="d-flex row justify-content-around">
@@ -64,13 +70,37 @@
                     @2025,Porbandar Gujarat 360575</br>Develop by:PMD
                 </div>
         </div>
-            </form>
+    </form>
 
-            <script type="text/javascript" src="generate.js" ></script>
-        </div>
-    </head>
+    <script type="text/javascript" src="generate.js" ></script>
+</div>
+</head>
 </body>
 </html>
-<% 
+<%
+    try {
+        String unm = request.getParameter("unm");
+        String pw1 = request.getParameter("pw");
+        registration r = new registration();
+        Configuration con = new Configuration().configure().addAnnotatedClass(registration.class);
+        SessionFactory sf = con.buildSessionFactory();
+        Session s = sf.openSession();
+        Query o = s.createQuery("from registration where  username like'%" + unm + "%' ");
+        List<registration> l = o.list();
+        for (registration elem : l) {
+            String usernm = elem.getUsername();
+            String pw = elem.getPassword();
+            if (unm.equals(usernm) && pw1.equals(pw)) {
+                out.println("done");
+            } else {
+                out.println("incorrect");
 
+            }
+            out.print(usernm + pw);
+
+        }
+
+    } catch (Exception e) {
+        System.out.println(e);
+    }
 %>

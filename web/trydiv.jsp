@@ -22,7 +22,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -31,87 +30,89 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-
-
         <title>JSP Page</title>
-    <body >
+    </head>
+    <body>
         <div class="card bg-transparent border-light"
              style=" background: linear-gradient(160deg,#89D8E3,#CD899E,#F9D3C0,#CFE0F8,#CD899E,#9B70A0,#101E42); height: auto; width: 390px; margin: 60px auto;">
             <div class="card-header h3  text-center  ">
                 Fish Transportation
-
             </div>
-            <div class="text-center h4 text-white">LOGIN FORM</div>
-            <form class="px-3 py-1">
+            <div class="text-center h4 text-white">FORGET PASSWORD</div>
 
-                <div class="card-body">
+            <div class="card-body">
+                <form class="row g-3 ">
 
-                    <div class="formmain mb-3">
-                        <input type="text" name="unm" placeholder=" " class="form-control textbox"/>
-                        <label  class="form-labeline">Enter Username</label>
+                    <div  class=" formmain" >
+                        <input type="number" id="mno" placeholder=""name="mno" max="1234567897"  class="form-control textbox" required>
+                        <label  class="form-labeline">Enter MobileNo</label>
                     </div>
 
-                    <div class="formmain mb-3"  style="padding: 0px !important;" >
-                        <input type="password" name="pw" placeholder=" " class="form-control textbox"/>
-                        <label  class="form-labeline">Enter Password</label>
-                    </div>
-                    <div class="d-flex row justify-content-around">
-                        <div class="col-md-3 col-lg-3 col-sm-4 fs-4 fw-bold" id="captchavalue">
+                    <div class="  formmain">
+                        <input type="text" class="form-control textbox"  name="pw"  id="pw" placeholder="">
+                        <label  class="form-labeline">New Password</label></div>
+                    <div class=" formmain">
+                        <input type="text" class="form-control textbox"  name="cpw" id="cpw" placeholder="">
+                        <label  class="form-labeline">Confirm Password</label></div>
+                    <div class="d-flex">
+                        <div class="col-md-3 col-lg-3 col-sm-4 fs-4 fw-bold" id="numcaptchvalue">
                             ssss
-                        </div><div class="col-md-7 col-lg-7 col-sm-8 p-0 formmain">
-                            <input type="text" class="form-control textbox" placeholder="">
-                            <label  class="form-labeline" >Enter Captcha</label></div>
+                        </div>
+                        <div class=" formmain col-lg-9">
+                            <input type="text" class="form-control textbox"  name="numcapt" id="numcaptch" placeholder="">
+                            <label  class="form-labeline">Enter Captcha</label></div></div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info text-center text-white " name="btn">Save</button>
                     </div>
-
-                </div>
-
-                <div class="my-2 text-center">
-                    <button type="submit" class="btn btn-info text-center text-white ">LOGIN</button>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                    <a href="registration.jsp" class="text-decoration-none  mx-1  text-white">User Registration</a>
-                    <a href="forgetpw.jsp" class="text-decoration-none  mx-1  text-white">Forget your Password</a>
-                </div>
-
-
-                <div class="card-footer text-center  text-white">
-                    @2025,Porbandar Gujarat 360575</br>Develop by:PMD
-                </div>
-        </div>
-    </form>
-
-    <script type="text/javascript" src="generate.js" ></script>
-</div>
-</head>
+                    <div class="mb-1">
+                        <a href="Loginform.jsp" class="text-decoration-none  mx-1 text-white">=>Login Form</a>
+                    </div>
+            </div>
+        </form>
+        <div class="card-footer text-center  text-white">
+            @2025,Porbandar Gujarat 360575</br>Develop by:PMD
+        </div> 
+    </div>
 </body>
 </html>
+<script type="text/javascript">
+    var num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+    var a = num[Math.floor(Math.random() * num.length)];
+    var b = num[Math.floor(Math.random() * num.length)];
+    var c = num[Math.floor(Math.random() * num.length)];
+    var d = num[Math.floor(Math.random() * num.length)];
+    var s = a + b + c + d;
+    numcaptchvalue.innerHTML = s;
+</script>
 <%
     try {
-        String unm=request.getParameter("unm");
-        String pw1=request.getParameter("pw");
+        String num = request.getParameter("mno");
+        String pw = request.getParameter("pw");
+        String cpw = request.getParameter("cpw");
         registration r = new registration();
         Configuration con = new Configuration().configure().addAnnotatedClass(registration.class);
         SessionFactory sf = con.buildSessionFactory();
         Session s = sf.openSession();
-        Query o = s.createQuery("from registration where  username like'%"+unm+"%' ");
+        Query o = s.createQuery("from registration where  mobileno like'%" + num + "%' ");
         List<registration> l = o.list();
         for (registration elem : l) {
-            String usernm = elem.getUsername();
-            String pw = elem.getPassword();
-            if( unm.equals(usernm)&&pw1.equals(pw))
-            {
-               out.println("done");
+            String number = elem.getMobileno();
+            if (num.equals(number)) {
+                    if(pw.equals(cpw))
+                    {
+                        mvcfile m=new mvcfile();
+                        m.update(pw);
+                        out.print("update");
+                    }
+            } else {
+                out.print("invalid number");
             }
-            else
-            {
-                out.println("incorrect");
-               
-            }
-                out.print(usernm+pw);
-            
         }
-        
-        }catch (Exception e) {
-            System.out.println(e);
+
+    } catch (Exception e) {
+        System.out.println(e);
     }
+
+
 %>

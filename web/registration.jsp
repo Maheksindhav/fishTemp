@@ -216,8 +216,6 @@
         'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
         'u', 'v', 'w', 'x', 'y', 'z'];
 
-
-
     var a = alpha[Math.floor(Math.random() * alpha.length)];
     var b = alpha[Math.floor(Math.random() * alpha.length)];
     var c = alpha[Math.floor(Math.random() * alpha.length)];

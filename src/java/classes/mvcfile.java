@@ -34,15 +34,31 @@ public class mvcfile {
             s.save(obj);
             tx.commit();
             System.out.println("successfully");
-            System.out.println(refid+fnm+unm+city+mobileno+email+pw);
+//            System.out.println(refid + fnm + unm + city + mobileno + email + pw);
         } catch (Exception e) {
-            System.out.println("not registration");
-               System.out.println(refid+fnm+unm+city+mobileno+email+pw);
-               System.out.println(e);
+            System.out.println("not registration" + e);
+//            System.out.println(refid + fnm + unm + city + mobileno + email + pw);
+
         }
         return 0;
-
     }
-    
+
+    public int update(String passwd) {
+        try {
+            registration obj = new registration();
+            obj.setPassword(passwd);
+            Configuration con = new Configuration().configure().addAnnotatedClass(registration.class);
+            SessionFactory sf = con.buildSessionFactory();
+            Session s = sf.openSession();
+            Transaction tx = s.beginTransaction();
+            s.update(obj);
+            tx.commit();
+            System.out.println("successfully update");
+
+        } catch (Exception e) {
+            System.out.println("not registration" + e);
+        }
+        return 0;
+    }
 
 }

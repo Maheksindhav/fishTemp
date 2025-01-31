@@ -82,6 +82,8 @@ public class registration {
 
     @Override
     public String toString() {
-        return "registration{" + "username=" + username + ", password=" + password + '}';
+        return "registration{" + "username=" + username + ", mobileno=" + mobileno + ", password=" + password + '}';
     }
+
+  
 }
