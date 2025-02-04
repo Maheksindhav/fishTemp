@@ -17,3 +17,4 @@ var sum = a + b + c + d;
 
 captchavalue.innerHTML = sum;
 
+

@@ -94,7 +94,6 @@
                 if (pw.equals(cpw)) {
                     mvcfile m = new mvcfile();
                     m.update(pw, num);
-
                 }
             } else {
                 out.print("invalid number");

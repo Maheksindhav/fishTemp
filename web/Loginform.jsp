@@ -42,30 +42,27 @@
                         <input type="text" name="unm" placeholder=" " class="form-control textbox"/>
                         <label  class="form-labeline">Enter Username</label>
                     </div>
-
+                    <!--<input type="hidden" name="cap1"  id="captchavalue" value=""/>-->
                     <div class="formmain mb-3"  style="padding: 0px !important;" >
                         <input type="password" name="pw" placeholder=" " class="form-control textbox"/>
                         <label  class="form-labeline">Enter Password</label>
                     </div>
+
                     <div class="d-flex row justify-content-around">
-                        <div class="col-md-3 col-lg-3 col-sm-4 fs-4 fw-bold" id="captchavalue">
+                        <div class="col-md-3 col-lg-3 col-sm-4 fs-4 fw-bold" id="captchavalue" >
                             ssss
                         </div><div class="col-md-7 col-lg-7 col-sm-8 p-0 formmain">
-                            <input type="text" class="form-control textbox" placeholder="">
+                            <input type="text" class="form-control textbox" placeholder="" name="cap2">
                             <label  class="form-labeline" >Enter Captcha</label></div>
                     </div>
-
                 </div>
-
                 <div class="my-2 text-center">
-                    <button type="submit" class="btn btn-info text-center text-white ">LOGIN</button>
+                    <button type="submit" class="btn btn-info text-center text-white "  name="btn">LOGIN</button>
                 </div>
                 <div class="d-flex justify-content-between mb-3">
                     <a href="registration.jsp" class="text-decoration-none  mx-1  text-white">User Registration</a>
                     <a href="forgetpw.jsp" class="text-decoration-none  mx-1  text-white">Forget your Password</a>
                 </div>
-
-
                 <div class="card-footer text-center  text-white">
                     @2025,Porbandar Gujarat 360575</br>Develop by:PMD
                 </div>
@@ -78,29 +75,33 @@
 </body>
 </html>
 <%
-    try {
-        String unm = request.getParameter("unm");
-        String pw1 = request.getParameter("pw");
-        registration r = new registration();
-        Configuration con = new Configuration().configure().addAnnotatedClass(registration.class);
-        SessionFactory sf = con.buildSessionFactory();
-        Session s = sf.openSession();
-        Query o = s.createQuery("from registration where  username like'%" + unm + "%' ");
-        List<registration> l = o.list();
-        for (registration elem : l) {
-            String usernm = elem.getUsername();
-            String pw = elem.getPassword();
-            if (unm.equals(usernm) && pw1.equals(pw)) {
-                out.println("done");
-            } else {
-                out.println("incorrect");
+    if (request.getParameter("btn") != null) {
+        try {
+            String unm = request.getParameter("unm");
+            String pw1 = request.getParameter("pw");
+            String cap1 = request.getParameter("cap1");
+//            String cap2 = request.getParameter("cap2");
+//            out.println(cap1 + cap2);
+            registration r = new registration();
+            Configuration con = new Configuration().configure().addAnnotatedClass(registration.class);
+            SessionFactory sf = con.buildSessionFactory();
+            Session s = sf.openSession();
+            Query o = s.createQuery("from registration where  username like'%" + unm + "%' ");
+            List<registration> l = o.list();
+            for (registration elem : l) {
+                String usernm = elem.getUsername();
+                String pw = elem.getPassword();
+                if (unm.equals(usernm) && pw1.equals(pw)) {
+                    out.println("done");
+                    out.print(usernm + pw);
+                } else {
+                    out.println("incorrect");
+                }
 
             }
-            out.print(usernm + pw);
 
+        } catch (Exception e) {
+            System.out.println(e);
         }
-
-    } catch (Exception e) {
-        System.out.println(e);
     }
 %>
