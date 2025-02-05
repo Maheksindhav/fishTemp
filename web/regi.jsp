@@ -14,7 +14,7 @@
 <%@page import="javax.mail.Session"%>
 <%@page import="java.util.Properties"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%! mvcfile crud=new mvcfile();
+<%! mvcfile crud = new mvcfile();
 %>
 <html>
     <head>
@@ -22,12 +22,13 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link href="design.css" rel="stylesheet"/>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
         <title>JSP Page</title>
     </head>
-    <%int id=crud.getid()+1;%>
+    <%int id = crud.getid() + 1;%>
     <body>
 
         <div class="card bg-transparent border-light"
@@ -39,7 +40,7 @@
             <div class="card-body">
                 <form class="row g-3 ">
                     <div  class=" formmain col-6" >
-                        <input type="text" class="form-control textbox" id="rid"  name="rid" value="<%=id!=0?id:""%>" oninput="saveValue()" placeholder="" readonly>                        <label  class="form-labeline">Reference id*</label>
+                        <input type="text" class="form-control textbox" id="rid"  name="rid" value="<%=id != 0 ? id : ""%>" oninput="saveValue()" placeholder="" readonly>                        <label  class="form-labeline">Reference id*</label>
                     </div>
 
                     <div  class=" formmain col-6" >
@@ -82,7 +83,7 @@
                         <button type="submit" class="btn btn-info text-center text-white " name="btn">Generate OTP</button>
                     </div>
                     <div class="mb-3">
-                        <a href="Loginform.jsp" class="text-decoration-none  mx-1 text-white">=>Login Form</a>
+                        <a href="Loginform.jsp" class="text-decoration-none  mx-1 text-white"><i class='bx bxs-chevrons-right' ></i>Login Form</a>
                     </div>
 
                 </form>
@@ -140,7 +141,6 @@
                 }
 
             }
-         
 
 
         %>
