@@ -62,20 +62,10 @@
                 var cotp = document.getElementById("otpc").value;
                 var divDemo = document.getElementById("regi");
                 var otp = sessionStorage.getItem("otp");
-                debugger;
-                alert(cotp);
-                if (cotp == "")
-                {
-                    cotp.focus();
-                    alert("hello");
-                }
                 if (otp === cotp)
                 {
                     checkpw.style.display = "flex";
                     divDemo.style.display = "block";
-
-
-
                 }
             }
         </script>
