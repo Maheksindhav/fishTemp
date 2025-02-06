@@ -15,7 +15,8 @@
 <%@page import="javax.mail.Session"%>
 <%@page import="java.util.Properties"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%!String alertType = "info";
+    String message = null;%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -60,8 +61,14 @@
                 var checkpw = document.getElementById("checkpw");
                 var cotp = document.getElementById("otpc").value;
                 var divDemo = document.getElementById("regi");
-
                 var otp = sessionStorage.getItem("otp");
+                debugger;
+                alert(cotp);
+                if (cotp == "")
+                {
+                    cotp.focus();
+                    alert("hello");
+                }
                 if (otp === cotp)
                 {
                     checkpw.style.display = "flex";
@@ -87,16 +94,16 @@
                 <form class="row g-3 ">
 
                     <div  class=" formmain col-6" >
-                        <input type="text" class="form-control textbox" id="refid"  name="refid" placeholder="">
+                        <input type="text" class="form-control textbox" id="refid"  name="refid" placeholder="" >
                         <label  class="form-labeline">Reference id*</label>
                     </div>
                     <div  class=" formmain col-6" >
                         <input type="text" class="form-control textbox" id="fullnm"  name="fnm" placeholder="">
-                        <label  class="form-labeline">Enter Fullname</label>
+                        <label  class="form-labeline">Enter Fullname*</label>
                     </div>
                     <div  class=" formmain col-6">
                         <input type="text" class="form-control textbox" id="refeid" name="unm"  placeholder="">
-                        <label  class="form-labeline">Enter Username</label>
+                        <label  class="form-labeline">Enter Username*</label>
                     </div>
                     <div class="col-6">
                         <select id="dropdown2" class="form-select" name="dropdown2" >
@@ -108,11 +115,11 @@
                     </div>
                     <div  class=" formmain col-6" >
                         <input type="number" id="mno" placeholder="" name="mno" class="form-control textbox">
-                        <label  class="form-labeline">Enter MobileNo</label>
+                        <label  class="form-labeline">Enter MobileNo*</label>
                     </div>
                     <div  class=" formmain col-6">
                         <input type="email"  placeholder="" name="em"  id="emv" class="form-control textbox" >
-                        <label  class="form-labeline" >Enter Email</label>
+                        <label  class="form-labeline" >Enter Email*</label>
                     </div>
                     <input type="hidden" id="otp" name="o" value="<%= request.getParameter("otp")%>"/>
                     <div class="d-flex">
@@ -137,15 +144,16 @@
                     </div>
                     <div   style="display: none;justify-content: space-between;gap:6px" id="checkpw" >
                         <div class="  formmain col-6">
-                            <input type="password" class="form-control textbox"  name="pw"  id="pw" placeholder="">
-                            <label  class="form-labeline">Password</label></div>
+                            <input type="password" class="form-control textbox"  name="pw"  id="pw" placeholder="" required>
+                            <label  class="form-labeline">Password*</label></div>
                         <div class=" formmain col-6">
-                            <input type="password" class="form-control textbox"  name="cpw" id="cpw" placeholder="">
-                            <label  class="form-labeline">Confirm Password</label></div>
+                            <input type="password" class="form-control textbox"  name="cpw" id="cpw" placeholder="" required>
+                            <label  class="form-labeline">Confirm Password*</label></div>
 
                     </div>
                     <div class="text-center" id="regi" style="display:none">
-                        <button type="submit" class="btn btn-info text-center text-white " name="regibtn">Registration</button>
+                        <button type="submit" class="btn btn-info text-center text-white " name="regibtn"  data-bs-toggle="modal" 
+                                data-bs-target="#staticBackdrop">Registration</button>
                     </div>
                     <div class="mb-1">
                         <a href="Loginform.jsp" class="text-decoration-none  mx-1 text-white"><i class='bx bxs-chevrons-right' ></i>Login Form</a>
@@ -156,88 +164,147 @@
             @2025,Porbandar Gujarat 360575</br>Develop by:PMD
         </div> 
     </div>
+
+    <%
+        if (request.getParameter("btn") != null) {
+            final String otp = request.getParameter("o");
+            final String subject = "OTP";
+            final String to = request.getParameter("em");
+
+            Properties pro = new Properties();
+            pro.put("mail.smtp.host", "smtp.gmail.com");
+            pro.put("mail.smtp.port", "587");
+            pro.put("mail.smtp.auth", "true");
+            pro.put("mail.smtp.starttls.enable", "true");
+
+            Session se = Session.getDefaultInstance(pro, new Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+
+                    return new PasswordAuthentication("maheksindhav3@gmail.com", "khuc vcbc mmqd jgkr");
+                }
+
+            });
+
+            try {
+                //COMPOSITE MAIL
+                SMTPMessage sendmessage = new SMTPMessage(se);
+
+                sendmessage.setFrom(new InternetAddress("maheksindhav3@gmail.com"));
+                sendmessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+                sendmessage.setSubject(subject);
+                sendmessage.setText(otp);
+
+                Transport.send(sendmessage);
+
+            } catch (Exception e) {
+                out.println(e);
+
+            }
+        } else if (request.getParameter("regibtn") != null) {
+            if (request.getParameter("pw").equals(request.getParameter("cpw"))) {
+                int refid = Integer.parseInt(request.getParameter("refid"));
+                String fnm = request.getParameter("fnm");
+                String unm = request.getParameter("unm");
+                String city = request.getParameter("dropdown2");
+                String mobileno = request.getParameter("mno");
+                String email = request.getParameter("em");
+                String pw = request.getParameter("pw");
+                mvcfile m = new mvcfile();
+                m.insertdata(refid, fnm, unm, city, mobileno, email, pw);
+                message = "Registration Successfully";
+                alertType = "success";
+                response.sendRedirect("Loginform.jsp");
+            } else {
+
+                message = "Try Again";
+                alertType = "danger";
+            }
+        }
+    %>
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex flex-column justify-content-center align-items-center">
+
+                    <%
+                        if (alertType == "danger") {
+                    %>
+                    <!--<img  src="CSS/Images/tryag.png" height="70px" width="70px"/>-->
+
+                    <%
+                    } else {
+                    %>
+                    <!--<img  src="CSS/Images/succes.png" height="70px" width="70px"/>-->
+                    <%
+                        }
+                    %>
+                    <p class="mt-2 mb-0 fw-bold fs-5"><%= message != null ? message : "No message available."%></p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <%
+                        if (alertType == "danger") {
+                    %>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="okButton" >Okay</button>
+
+                    <%
+                    } else {
+                    %>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="okButton" >Okay</button>
+                    <%
+                        }
+                    %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+            'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+            'u', 'v', 'w', 'x', 'y', 'z'];
+
+        var a = alpha[Math.floor(Math.random() * alpha.length)];
+        var b = alpha[Math.floor(Math.random() * alpha.length)];
+        var c = alpha[Math.floor(Math.random() * alpha.length)];
+        var d = alpha[Math.floor(Math.random() * alpha.length)];
+
+        var sum = a + b + c + d;
+
+        captchvalue.innerHTML = sum;
+        document.getElementById("captch").value = sum;
+
+        var num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        var a = num[Math.floor(Math.random() * num.length)];
+        var b = num[Math.floor(Math.random() * num.length)];
+        var c = num[Math.floor(Math.random() * num.length)];
+        var d = num[Math.floor(Math.random() * num.length)];
+        var e = num[Math.floor(Math.random() * num.length)];
+        var f = num[Math.floor(Math.random() * num.length)];
+
+        var s = a + b + c + d + e + f;
+
+        document.getElementById("otp").value = s;
+        <% if (message != null) { %>
+        document.addEventListener("DOMContentLoaded", function () {
+            const alertModal = new bootstrap.Modal(document.getElementById("alertModal"));
+            alertModal.show();
+            const okButton = document.getElementById("okButton");
+            if (okButton) {
+                okButton.addEventListener("click", function () {
+                    // Remove query parameters from the URL
+                    const baseUrl = window.location.origin + window.location.pathname;
+                    window.location.replace(baseUrl); // Replaces current URL and refreshes
+//                    window.location.replace(" ",baseUrl);
+//                request.setAttribute("message", null);
+        <%message = null;%>
+                });
+            }
+        });
+        <% }%>
+
+
+    </script>
 </body>
 </html>
-<%
-    if (request.getParameter("btn") != null) {
-        final String otp = request.getParameter("o");
-        final String subject = "OTP";
-        final String to = request.getParameter("em");
-
-        Properties pro = new Properties();
-        pro.put("mail.smtp.host", "smtp.gmail.com");
-        pro.put("mail.smtp.port", "587");
-        pro.put("mail.smtp.auth", "true");
-        pro.put("mail.smtp.starttls.enable", "true");
-
-        Session se = Session.getDefaultInstance(pro, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-
-                return new PasswordAuthentication("maheksindhav3@gmail.com", "khuc vcbc mmqd jgkr");
-            }
-
-        });
-
-        try {
-            //COMPOSITE MAIL
-            SMTPMessage sendmessage = new SMTPMessage(se);
-
-            sendmessage.setFrom(new InternetAddress("maheksindhav3@gmail.com"));
-            sendmessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            sendmessage.setSubject(subject);
-            sendmessage.setText(otp);
-
-            Transport.send(sendmessage);
-
-        } catch (Exception e) {
-            out.println(e);
-
-        }
-    } else if (request.getParameter("regibtn") != null) {
-        if (request.getParameter("pw").equals(request.getParameter("cpw"))) {
-            int refid = Integer.parseInt(request.getParameter("refid"));
-            String fnm = request.getParameter("fnm");
-            String unm = request.getParameter("unm");
-            String city = request.getParameter("dropdown2");
-            String mobileno = request.getParameter("mno");
-            String email = request.getParameter("em");
-            String pw = request.getParameter("pw");
-            mvcfile m = new mvcfile();
-            m.insertdata(refid, fnm, unm, city, mobileno, email, pw);
-            out.println("successfully");
-        } else {
-            out.println(" not successfully");
-        }
-    }
-%>
-<script type="text/javascript">
-    var alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
-        'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-        'u', 'v', 'w', 'x', 'y', 'z'];
-
-    var a = alpha[Math.floor(Math.random() * alpha.length)];
-    var b = alpha[Math.floor(Math.random() * alpha.length)];
-    var c = alpha[Math.floor(Math.random() * alpha.length)];
-    var d = alpha[Math.floor(Math.random() * alpha.length)];
-
-    var sum = a + b + c + d;
-
-    captchvalue.innerHTML = sum;
-    document.getElementById("captch").value = sum;
-
-    var num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-    var a = num[Math.floor(Math.random() * num.length)];
-    var b = num[Math.floor(Math.random() * num.length)];
-    var c = num[Math.floor(Math.random() * num.length)];
-    var d = num[Math.floor(Math.random() * num.length)];
-    var e = num[Math.floor(Math.random() * num.length)];
-    var f = num[Math.floor(Math.random() * num.length)];
-
-    var s = a + b + c + d + e + f;
-
-    document.getElementById("otp").value = s;
-
-
-</script>

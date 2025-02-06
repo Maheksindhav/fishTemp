@@ -40,19 +40,20 @@
             <div class="card-body">
                 <form class="row g-3 ">
                     <div  class=" formmain col-6" >
-                        <input type="text" class="form-control textbox" id="rid"  name="rid" value="<%=id != 0 ? id : ""%>" oninput="saveValue()" placeholder="" readonly>                        <label  class="form-labeline">Reference id*</label>
+                        <input type="text" class="form-control textbox" id="rid"  name="rid" value="<%=id != 0 ? id : ""%>" oninput="saveValue()" placeholder="" readonly required>
+                        <label  class="form-labeline">Reference id*</label>
                     </div>
 
                     <div  class=" formmain col-6" >
-                        <input type="text" class="form-control textbox" id="fullnm"  name="fullnm" oninput="saveValue()" placeholder="">
+                        <input type="text" class="form-control textbox" id="fullnm"  name="fullnm" oninput="saveValue()" placeholder="" required>
                         <label  class="form-labeline">Enter Fullname*</label>
                     </div>
                     <div  class=" formmain col-6">
-                        <input type="text" class="form-control textbox" id="unm" name="unm" oninput="saveValue()" placeholder="">
+                        <input type="text" class="form-control textbox" id="unm" name="unm" oninput="saveValue()" placeholder="" required>
                         <label  class="form-labeline">Enter Username*</label>
                     </div>
                     <div class="col-6">
-                        <select id="dropdown1" class="form-select"  name="op" onchange="saveValue()">
+                        <select id="dropdown1" class="form-select"  name="op" onchange="saveValue()" required>
                             <option selected>---Choose City---</option>
                             <option value="Porbandar">Porbandar</option>
                             <option value="Surat">Surat</option>
@@ -60,11 +61,11 @@
                         </select>
                     </div>
                     <div  class=" formmain col-6" >
-                        <input type="number" id="mno" placeholder=""  name="mnum" oninput="saveValue()"  class="form-control textbox">
+                        <input type="number" id="mno" placeholder=""  name="mnum" oninput="saveValue()"  class="form-control textbox" required>
                         <label  class="form-labeline">Enter MobileNo*</label>
                     </div>
                     <div  class=" formmain col-6">
-                        <input type="email"  placeholder="" name="em"  id="em" oninput="saveValue()" class="form-control textbox" >
+                        <input type="email"  placeholder="" name="em"  id="em" oninput="saveValue()" class="form-control textbox"  required>
                         <label  class="form-labeline" >Enter Email*</label>
                     </div>
                     <input type="hidden" id="otp" name="o" oninput="saveValue()"  value="<%= request.getParameter("otp")%>"/>
@@ -75,7 +76,7 @@
 
                         </div>
                         <div class=" formmain col-lg-9">
-                            <input type="text" class="form-control textbox"  name="c" id="icaptch" oninput="saveValue()" placeholder="">
+                            <input type="text" class="form-control textbox"  name="c" id="icaptch" oninput="saveValue()" placeholder="" required>
                             <label  class="form-labeline">Enter Captcha</label></div>
                     </div>
 

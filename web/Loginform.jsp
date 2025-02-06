@@ -12,6 +12,9 @@
 <%@page import="classes.registration"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<%!String alertType = "info";
+    String message = null;%>
+
 <!DOCTYPE html>
 <html>
 
@@ -24,12 +27,13 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    </head>
 
-
-        <title>JSP Page</title>
+    <title>JSP Page</title>
     <body >
         <div class="card bg-transparent border-light"
-             style=" background: linear-gradient(160deg,#89D8E3,#CD899E,#F9D3C0,#CFE0F8,#CD899E,#9B70A0,#101E42); height: auto; width: 390px; margin: 60px auto;">
+             style=" background: linear-gradient(160deg,#89D8E3,#CD899E,#F9D3C0,#CFE0F8,#CD899E,#9B70A0,#101E42); 
+             height: auto; width: 390px; margin: 60px auto;">
             <div class="card-header h3  text-center  ">
                 Fish Transportation
 
@@ -40,12 +44,12 @@
                 <div class="card-body">
 
                     <div class="formmain mb-3">
-                        <input type="text" name="unm" placeholder=" " class="form-control textbox"/>
+                        <input type="text" name="unm" placeholder=" " class="form-control textbox" required/>
                         <label  class="form-labeline">Enter Username</label>
                     </div>
                     <!--<input type="hidden" name="cap1"  id="captchavalue" value=""/>-->
                     <div class="formmain mb-3"  style="padding: 0px !important;" >
-                        <input type="password" name="pw" placeholder=" " class="form-control textbox"/>
+                        <input type="password" name="pw" placeholder=" " class="form-control textbox" required/>
                         <label  class="form-labeline">Enter Password</label>
                     </div>
 
@@ -53,16 +57,16 @@
                         <div class="col-md-3 col-lg-3 col-sm-4 fs-4 fw-bold" id="captchavalue" >
                             ssss
                         </div><div class="col-md-7 col-lg-7 col-sm-8 p-0 formmain">
-                            <input type="text" class="form-control textbox" placeholder="" name="cap2">
+                            <input type="text" class="form-control textbox" placeholder="" name="cap2" required>
                             <label  class="form-labeline" >Enter Captcha</label></div>
                     </div>
                 </div>
                 <div class="my-2 text-center">
-                    <button type="submit" class="btn btn-info text-center text-white "  name="btn"><i class='bx bxs-lock' ></i>LOGIN</button>
+                    <button type="submit" class="btn btn-info text-center text-white "  name="btn"  data-bs-toggle="modal" 
+                            data-bs-target="#staticBackdrop"><i class='bx bxs-lock mx-1' ></i>LOGIN</button>
                 </div>
                 <div class="d-flex justify-content-between mb-3">
-                    <a href="registration.jsp" class="text-decoration-none  mx-1  text-white">
-                        <i class='bx bxs-user'></i>User Registration</a>
+                    <a href="regi.jsp" class="text-decoration-none  mx-1  text-white">  <i class='bx bxs-user mx-1'></i>User Registration</a>
                     <a href="forgetpw.jsp" class="text-decoration-none  mx-1  text-white">Forget your Password</a>
                 </div>
                 <div class="card-footer text-center  text-white">
@@ -73,9 +77,7 @@
 
     <script type="text/javascript" src="generate.js" ></script>
 </div>
-</head>
-</body>
-</html>
+
 <%
     if (request.getParameter("btn") != null) {
         try {
@@ -94,10 +96,12 @@
                 String usernm = elem.getUsername();
                 String pw = elem.getPassword();
                 if (unm.equals(usernm) && pw1.equals(pw)) {
-                    out.println("done");
-                    out.print(usernm + pw);
+                    message = "Successfully Login";
+                    alertType = "success";
+//                    out.print(usernm + pw);
                 } else {
-                    out.println("incorrect");
+                    message = "Try Again";
+                    alertType = "danger";
                 }
 
             }
@@ -107,3 +111,62 @@
         }
     }
 %>
+
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body d-flex flex-column justify-content-center align-items-center">
+
+                <%
+                    if (alertType == "danger") {
+                %>
+                <!--<img  src="CSS/Images/tryag.png" height="70px" width="70px"/>-->
+
+                <%
+                } else {
+                %>
+                <!--<img  src="CSS/Images/succes.png" height="70px" width="70px"/>-->
+                <%
+                    }
+                %>
+                <p class="mt-2 mb-0 fw-bold fs-5"><%= message != null ? message : "No message available."%></p>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <%
+                    if (alertType == "danger") {
+                %>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="okButton" >Okay</button>
+
+                <%
+                } else {
+                %>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="okButton" >Okay</button>
+                <%
+                    }
+                %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    <% if (message != null) { %>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertModal = new bootstrap.Modal(document.getElementById("alertModal"));
+        alertModal.show();
+        const okButton = document.getElementById("okButton");
+        if (okButton) {
+            okButton.addEventListener("click", function () {
+                // Remove query parameters from the URL
+                const baseUrl = window.location.origin + window.location.pathname;
+                window.location.replace(baseUrl); // Replaces current URL and refreshes
+//                    window.location.replace(" ",baseUrl);
+//                request.setAttribute("message", null);
+    <%message = null;%>
+            });
+        }
+    });
+    <% }%>
+</script>
+</body>
+</html>
